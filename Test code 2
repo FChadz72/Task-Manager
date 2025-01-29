@@ -1,0 +1,44 @@
+todolist=[]
+
+
+  
+def main ():
+   todolist = []
+  
+   while True:
+       print("----To-Do-List Menu----")
+       print("1.Add Tasks")
+       print("2.Show Taks")
+       print("3.Mark As Done")
+       print("4.Exit to-do-list")
+       Option = input("Pick an option:")
+  
+       if Option == '1':
+           numoflist = int(input("how many tasks would yo like to add?"))
+           for i in range(numoflist) :
+               task = input("Add task to list:")
+               todolist.append({"task": task, "done": False})
+               print( task,"has been added to your to do list")
+          
+
+
+       elif Option == '2':
+           print("\nTasks:")
+           for index, task in enumerate(todolist):
+               status = "Done" if task["done"] else "Not Done"
+               print(f"{index + 1}. {task['task']} - {status}")
+
+
+       elif Option == '3':
+           task = input("Which tasks have you completed?")
+           if task in todolist :
+               status = "Done"
+               print(f"{task['task']} - {status}")
+
+
+           print("Marked As Done")
+
+
+       else:
+           print("Invalid option, please try again")
+main()
