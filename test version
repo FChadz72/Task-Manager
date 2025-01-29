@@ -1,0 +1,25 @@
+#make a to-do list
+
+todolist=[]
+
+def addtask():
+    x = input("Add task to list:")
+    if x not in todolist: todolist.append(x)
+    else : print("already in list")
+    print (x,"has been added to your to do list")
+    return x
+
+
+
+def removetask():
+    y = input("Which task has been completed:")
+    if y in todolist: todolist.remove(y)
+    print(y, "has been removed from list")
+    return y
+
+numoflist = int(input("how many tasks would yo like to add?"))
+
+for i in range(numoflist) :
+    addtask()
+
+removetask()
