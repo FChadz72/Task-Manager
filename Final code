@@ -1,0 +1,122 @@
+""" Json imported to save & load tasks in a JSON file while
+os is imported to check if the file exists before attepting to load it"""
+import json
+import os
+
+
+# File to store tasks
+TASK_FILE = "tasks.json"
+
+
+""" Checks if json file exist, if the file exists then it is open in read mode
+and load the tasks, if file doesn't exist then it returns an empty list"""
+def load_tasks():
+   if os.path.exists(TASK_FILE):
+       with open(TASK_FILE, "r") as file:
+           return json.load(file)
+   return []
+
+
+# Json file is opened in write mode and json.dump is used to save list on to the file
+def save_tasks(todolist):
+   with open(TASK_FILE, "w") as file:
+       json.dump(todolist, file, indent=4)
+
+
+""" User is asked how many tasks they would like to add, Nonnumerical values lead to an error message.
+The for loop then iterates for that many times to get tasks from user.
+The tasks are then saved as a dictionary to the lsit & saves the updated list"""
+def add_tasks(todolist):
+   try:
+       numoflist = int(input("How many tasks would you like to add? "))
+       for _ in range(numoflist):
+           task = input("Add task to list: ")
+           todolist.append({"task": task, "done": False})
+           print(f"{task} has been added to your to-do list.")
+       save_tasks(todolist)
+   except ValueError:
+       print("Invalid input. Please enter a number.")
+
+
+# displays the tasks in the list in the terminal with their status
+def show_tasks(todolist):
+   if not todolist:
+       print("\nNo tasks available.\n")
+       return
+   print("\nTasks:")
+   for index, task in enumerate(todolist):
+       status = "Done" if task["done"] else "Not Done"
+       print(f"{index + 1}. {task['task']} - {status}")
+
+
+""" Asks user which tasks they would like to update the status for by picking the number associated with
+the task, if the number is invalid then error message is printed"""
+def mark_as_done(todolist):
+   show_tasks(todolist)
+   try:
+       task_index = int(input("Enter the task number you have completed: ")) - 1
+       if 0 <= task_index < len(todolist):
+           todolist[task_index]["done"] = True
+           print(f"Task '{todolist[task_index]['task']}' marked as done.")
+           save_tasks(todolist)
+       else:
+           print("Invalid task number.")
+   except ValueError:
+       print("Invalid input. Please enter a number.")
+
+
+""" User is asked which task they would like to delete, if input is valid then\
+the task is removed from the list and the updated list is saved."""
+def delete_task(todolist):
+   show_tasks(todolist)
+   try:
+       task_index = int(input("Enter the task number to delete: ")) - 1
+       if 0 <= task_index < len(todolist):
+           removed_task = todolist.pop(task_index)
+           print(f"Task '{removed_task['task']}' has been deleted.")
+           save_tasks(todolist)
+       else:
+           print("Invalid task number.")
+   except ValueError:
+       print("Invalid input. Please enter a number.")
+
+
+def main():
+   # Main function to run the to do list, loads tasks from the file
+   todolist = load_tasks()
+ 
+   """ While loop is to display a menu in an infinite loop, the user can pick
+   # what action they would like to execute by picking a number. Selecting the
+   # number 5 allows the user to exit the loop and stops the task manager."""
+   while True:
+       print("\n---- To-Do List Menu ----")
+       print("1. Add Tasks")
+       print("2. Show Tasks")
+       print("3. Mark As Done")
+       print("4. Delete Task")
+       print("5. Exit To-Do List")
+
+
+       option = input("Pick an option: ")
+
+
+       if option == '1':
+           add_tasks(todolist)
+       elif option == '2':
+           show_tasks(todolist)
+       elif option == '3':
+           mark_as_done(todolist)
+       elif option == '4':
+           delete_task(todolist)
+       elif option == '5':
+           print("Exiting To-Do List. Goodbye!")
+           break
+       else:
+           print("Invalid option, please try again.")
+
+
+# Ensures script runs only when executed directed
+if __name__ == "__main__":
+   main()
+
+
